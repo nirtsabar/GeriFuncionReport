@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>טופס דיווח תיפקוד</title>
+    <style>
+        /* CSS קיים - ללא שינוי מהותי למעט הוספת class לאזהרה */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, "Arial", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            transition: border-right 0.3s ease-in-out; /* הוסף מעבר לסימון הגבול */
+        }
+        .section:last-of-type {
+            border-bottom: none;
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease-in-out; /* הוסף מעבר לסימון הצבע */
+        }
+        .section-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 16px; /* 16px minimum prevents iOS auto-zoom */
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            padding-left: 30px;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        /* סגנון אזהרה לשדות חסרים */
+        .input-warning {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+        }
+        .label-warning {
+            color: #dc3545 !important;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            min-height: 44px; /* iOS minimum touch target */
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-left: 10px;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            -webkit-appearance: none;
+            appearance: none;
+            border: 2px solid #aaa;
+            background: white;
+            vertical-align: middle;
+            position: relative;
+        }
+        input[type="radio"] {
+            border-radius: 50%;
+        }
+        input[type="checkbox"] {
+            border-radius: 4px;
+        }
+        input[type="radio"]:checked {
+            border-color: #667eea;
+            background: #667eea;
+            box-shadow: inset 0 0 0 3px white;
+        }
+        input[type="checkbox"]:checked {
+            border-color: #667eea;
+            background: #667eea;
+        }
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .radio-item label,
+        .checkbox-item label {
+            margin: 0;
+            margin-right: 10px;
+            cursor: pointer;
+            flex: 1;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+        .char-count {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-height: 44px;
+            -webkit-appearance: none;
+            touch-action: manipulation;
+        }
+        .btn-submit {
+            background: #667eea;
+            color: white;
+        }
+        .btn-submit:hover,
+        .btn-submit:active {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-reset:hover,
+        .btn-reset:active {
+            background: #e0e0e0;
+        }
+        .summary {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 2px solid #667eea;
+        }
+        .summary.show {
+            display: block;
+        }
+        .summary h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .summary-content {
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        .summary-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-share {
+            background: #28a745;
+            color: white;
+            flex: 1;
+            min-width: 150px;
+        }
+        .btn-share:hover,
+        .btn-share:active {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 15px;
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .buttons {
+                flex-direction: column;
+            }
+            .buttons button {
+                width: 100%;
+                padding: 14px;
+                min-height: 48px;
+            }
+            .summary-actions {
+                flex-direction: column;
+            }
+            .summary-actions button {
+                min-width: unset;
+                width: 100%;
+                min-height: 48px;
+            }
+        }
+        .file-upload-group {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .file-upload-group input[type="file"] {
+            display: none;
+        }
+        .file-upload-group label {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #17a2b8;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+        .file-upload-group label:hover,
+        .file-upload-group label:active {
+            background: #138496;
+        }
+    </style>
+</head>
+<body onload="loadFormData()">
+    <div class="container">
+        <h1>📋 דיווח תיפקוד לתביעת ביטוח סיעוד</h1>
+        <p class="subtitle">טופס למילוי עצמי או ע"י בן משפחה</p>
+        <p style="text-align:center; color:#856404; background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:10px 15px; margin-bottom:20px; font-size:14px;">⚠️ אם אינך רוצה שהמידע יישמר במכשיר/מחשב זה, נקה את הטופס בסיום העבודה.</p>
+        
+        <div class="file-upload-group">
+            <label for="fileLoader">⬆️ טען נתונים מקובץ (.txt)</label>
+            <input type="file" id="fileLoader" accept=".txt">
+        </div>
+
+        <form id="form">
+            <div class="section">
+                <h2>פרטים בסיסיים</h2>
+                <div class="row">
+                    <div class="form-group" data-required-field>
+                        <label for="caller" data-required-label>מי הפונה? *</label>
+                        <textarea id="caller" maxlength="200" placeholder="שם ומערכת היחסים למטופל (למשל: בן/בת, בעל/בעלת, וכו')"></textarea>
+                        <div class="char-count"><span id="callerCount">0</span>/200</div>
+                    </div>
+                    <div class="form-group" data-required-field>
+                        <label for="gender" data-required-label>מין המטופל *</label>
+                        <select id="gender">
+                            <option value="">-- בחר --</option>
+                            <option value="m">זכר</option>
+                            <option value="f">נקבה</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="mobility">
+                <h2 data-required-label><span class="section-number">1</span>ניידות בבית *</h2>
+                <div class="form-group">
+                    <label>בחר את המצב המתאים</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" id="mobility1" name="mobility" value="הליכה, ישיבה וקימה ללא עזרת אחרים"><label for="mobility1">הליכה, ישיבה וקימה ללא עזרת אחרים</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility2" name="mobility" value="הליכה ללא עזרת אחרים, אך לעיתים תכופות תסמינים וקשיים רפואיים"><label for="mobility2">הליכה ללא עזרת אחרים, אך לעיתים תכופות תסמינים וקשיים רפואיים</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility3" name="mobility" value="יש צורך בעזרת הזולת בהליכה או בקימה"><label for="mobility3">יש צורך בעזרת הזולת בהליכה או בקימה או במעבר</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility4" name="mobility" value="אי יכולת לקום וללכת"><label for="mobility4">אי יכולת לקום וללכת</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility5" name="mobility" value="בכיסא גלגלים עם התניידות עצמאית"><label for="mobility5">בכיסא גלגלים עם התניידות עצמאית ללא עזרה</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility6" name="mobility" value="בכיסא גלגלים עם צורך בעזרה מלאה"><label for="mobility6">בכיסא גלגלים עם צורך בעזרה מלאה</label></div>
+                        <div class="radio-item"><input type="radio" id="mobility7" name="mobility" value="other"><label for="mobility7">אחר (טקסט חופשי)</label></div>
+                    </div>
+                </div>
+                <div class="form-group" id="mobilityOtherDiv" style="display:none;">
+                    <textarea id="mobilityOther" maxlength="200" placeholder="תאר את המצב..."></textarea>
+                    <div class="char-count"><span id="mobilityOtherCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="section-number">2</span>נפילות</h2>
+                <div class="row">
+                    <div class="form-group" data-required-field>
+                        <label for="fallsTotal" data-required-label>כמה נפילות ב-3 חודשים האחרונים? *</label>
+                        <input type="number" id="fallsTotal" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fallsHome">כמה מהן בבית?</label>
+                        <input type="number" id="fallsHome" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fallsGetUp">האם קם/קמה לבד?</label>
+                    <select id="fallsGetUp">
+                        <option value="">-- בחר --</option>
+                        <option value="לא">לא</option>
+                        <option value="בחלקן">בחלקן</option>
+                        <option value="כן">כן</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>תלות בזולת במעברים</h2>
+                <div class="form-group" data-required-group="transferLying">
+                    <label data-required-label>משכיבה לישיבה *</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="transferLying" value="לא"><label>לא</label></div>
+                        <div class="radio-item"><input type="radio" name="transferLying" value="לעיתים"><label>לעיתים</label></div>
+                        <div class="radio-item"><input type="radio" name="transferLying" value="תמיד"><label>תמיד</label></div>
+                    </div>
+                </div>
+                <div class="form-group" data-required-group="transferSitting">
+                    <label data-required-label>מישיבה לעמידה *</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="transferSitting" value="לא"><label>לא</label></div>
+                        <div class="radio-item"><input type="radio" name="transferSitting" value="לעיתים"><label>לעיתים</label></div>
+                        <div class="radio-item"><input type="radio" name="transferSitting" value="תמיד"><label>תמיד</label></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>פרטים נוספים על ניידות</h2>
+                <div class="form-group">
+                    <label for="mobilityDetails">ניידות בבית וחוץ - פרטים נוספים</label>
+                    <textarea id="mobilityDetails" maxlength="200" placeholder="תאר כל קושי או מגבלה..."></textarea>
+                    <div class="char-count"><span id="mobilityDetailsCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="dressing">
+                <h2 data-required-label><span class="section-number">3</span>תלות בזולת בהלבשה *</h2>
+                <div class="form-group">
+                    <label>בחר את המצב המתאים</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="dressing" value="התלבשות - ללא עזרה"><label>התלבשות - ללא עזרה</label></div>
+                        <div class="radio-item"><input type="radio" name="dressing" value="התלבשות - ללא עזרה אך עם תסמינים"><label>התלבשות - ללא עזרה אך עם תסמינים</label></div>
+                        <div class="radio-item"><input type="radio" name="dressing" value="התלבשות בהשגחה בשל סיכון נפילה"><label>התלבשות בהשגחה בשל סיכון נפילה</label></div>
+                        <div class="radio-item"><input type="radio" name="dressing" value="סיוע בהכנת פריטי הלבוש"><label>סיוע בהכנת פריטי הלבוש אך ההתלבשות עצמאית</label></div>
+                        <div class="radio-item"><input type="radio" name="dressing" value="עזרה בהלבשה או הפשטה של חלק מהבגדים"><label>עזרה בהלבשה או הפשטה של חלק מהבגדים</label></div>
+                        <div class="radio-item"><input type="radio" name="dressing" value="תלות מוחלטת בעזרת הזולת"><label>תלות מוחלטת בעזרת הזולת</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dressingDetails">פרטים נוספים על הלבשה</label>
+                    <textarea id="dressingDetails" maxlength="200" placeholder="..."></textarea>
+                    <div class="char-count"><span id="dressingDetailsCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="bathing">
+                <h2 data-required-label><span class="section-number">4</span>תלות בזולת ברחצה *</h2>
+                <div class="form-group">
+                    <label>בחר את המצב המתאים</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="bathing" value="רחצה ללא עזרה"><label>רחצה ללא עזרה</label></div>
+                        <div class="radio-item"><input type="radio" name="bathing" value="סיוע בהכנת תנאי הרחצה"><label>סיוע בהכנת תנאי הרחצה</label></div>
+                        <div class="radio-item"><input type="radio" name="bathing" value="רחצה ללא עזרה אך עם תסמינים"><label>רחצה ללא עזרה אך עם תסמינים</label></div>
+                        <div class="radio-item"><input type="radio" name="bathing" value="רחצה בהשגחה בשל סיכון נפילה"><label>רחצה בהשגחה בשל סיכון נפילה</label></div>
+                        <div class="radio-item"><input type="radio" name="bathing" value="עזרה ברחצה של חלק מאברי הגוף"><label>עזרה ברחצה של חלק מאברי הגוף</label></div>
+                        <div class="radio-item"><input type="radio" name="bathing" value="תלות בעזרת הזולת ברחצה של כל אברי הגוף"><label>תלות בעזרת הזולת ברחצה של כל אברי הגוף</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="bathingDetails">פרטים נוספים על רחצה</label>
+                    <textarea id="bathingDetails" maxlength="200" placeholder="..."></textarea>
+                    <div class="char-count"><span id="bathingDetailsCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="eating">
+                <h2 data-required-label><span class="section-number">5</span>אכילה ושתייה *</h2>
+                <div class="form-group">
+                    <label>בחר את המצב המתאים</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="eating" value="אכילה ושתיה עצמאיים ללא סיוע"><label>אכילה ושתיה עצמאיים ללא סיוע</label></div>
+                        <div class="radio-item"><input type="radio" name="eating" value="עזרה בחימום או הגשת המנה"><label>עזרה בחימום או הגשת המנה או בחיתוך המזון</label></div>
+                        <div class="radio-item"><input type="radio" name="eating" value="עזרה באכילה ושתיה"><label>עזרה באכילה ושתיה (הגשה לפה, השגחה)</label></div>
+                        <div class="radio-item"><input type="radio" name="eating" value="תלות מלאה בזולת"><label>תלות מלאה בזולת לשתיה או אכילה</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="eatingDetails">פרטים נוספים על אכילה ושתייה</label>
+                    <textarea id="eatingDetails" maxlength="200" placeholder="..."></textarea>
+                    <div class="char-count"><span id="eatingDetailsCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="excretion">
+                <h2 data-required-label><span class="section-number">6</span>טיפול בהפרשות *</h2>
+                <div class="form-group">
+                    <label>בחר את המצב המתאים</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" name="excretion" value="עצמאות מלאה"><label>עצמאות מלאה בטיפול בהפרשות</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="סיוע קל - ריקון בקבוק שתן"><label>סיוע קל - ריקון בקבוק שתן</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="צורך בהחתלה"><label>צורך בהחתלה</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="ליווי לשרותים בלילה"><label>ליווי לשרותים בלילה</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="תמיכה במעבר לשרותים"><label>תמיכה במעבר לשרותים</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="עזרה בהלבשת חלק תחתון"><label>עזרה בהלבשת חלק תחתון אחרי התרוקנות</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="עזרה בהגיינה אישית"><label>עזרה בהגיינה אישית</label></div>
+                        <div class="radio-item"><input type="radio" name="excretion" value="אין שליטה בשני הסוגרים"><label>אין שליטה - בשני הסוגרים</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="excretionDetails">פרטים נוספים על טיפול בהפרשות</label>
+                    <textarea id="excretionDetails" maxlength="200" placeholder="..."></textarea>
+                    <div class="char-count"><span id="excretionDetailsCount">0</span>/200</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>מוצרי ספיגה בשימוש</label>
+                    <div class="radio-group">
+                        <div class="radio-item"><input type="radio" id="absorbentNone" name="absorbent" value="אין"><label for="absorbentNone">אין</label></div>
+                        <div class="radio-item"><input type="radio" id="absorbentPads" name="absorbent" value="פדים"><label for="absorbentPads">פדים</label></div>
+                        <div class="radio-item"><input type="radio" id="absorbentPants" name="absorbent" value="תחתונים סופגים"><label for="absorbentPants">תחתונים סופגים</label></div>
+                        <div class="radio-item"><input type="radio" id="absorbentDiapers" name="absorbent" value="חיתולים חד פעמיים"><label for="absorbentDiapers">חיתולים חד פעמיים</label></div>
+                        <div class="radio-item"><input type="radio" id="absorbentOther" name="absorbent" value="other"><label for="absorbentOther">אחר</label></div>
+                    </div>
+                </div>
+                <div class="form-group" id="absorbentOtherDiv" style="display:none;">
+                    <input type="text" id="absorbentOtherText" placeholder="תאר את המוצר..." maxlength="100">
+                </div>
+                <div class="form-group" id="absorbentUsageDiv" style="display:none;">
+                    <label>שימוש במוצרים (ניתן לבחור כמה תשובות)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" name="absorbentUsage" value="בקביעות"><label>בקביעות</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="absorbentUsage" value="לשעות הלילה"><label>לשעות הלילה</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="absorbentUsage" value="ביציאה מהבית"><label>ביציאה מהבית</label></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" data-required-group="supervision">
+                <h2 data-required-label><span class="section-number">7</span>צורך בהשגחה *</h2>
+                <p style="margin-bottom: 15px; color: #666; font-size: 14px;">התייחס לצורך בהשגחה עקב סיכון עצמי או סביבתי (ניתן לבחור כמה תשובות. חובה לפחות בחירה אחת)</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל שתיה או אכילה לא נכונה"><label>בשל שתיה או אכילה לא נכונה או לא מספקת</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל נטיה לנפילות"><label>בשל נטיה לנפילות ולתאונות</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל ארועי חרדה"><label>בשל ארועי חרדה כאשר לבד</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל שוטטות מסוכנת"><label>בשל שוטטות מסוכנת מחוץ לבית</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל לבוש או התנהגות לא הולמים"><label>בשל לבוש או התנהגות לא הולמים</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בשל ארועי איבוד הכרה"><label>בשל ארועי איבוד הכרה בתקופה האחרונה</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="בעיה רפואית בשל אי יכולת לדבר"><label>בעיה רפואית שבגללה אין יכולת לדבר ולהזעיק עזרה</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="supervision" value="צורך בטיפול בחמצן"><label>בשל צורך בטיפול קבוע בחמצן</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="supervisionOtherCheck" name="supervision" value="other"><label for="supervisionOtherCheck">אחר</label></div>
+                </div>
+                <div class="form-group" id="supervisionOtherDiv" style="display:none;">
+                    <textarea id="supervisionOther" maxlength="200" placeholder="תאר את הצורך בהשגחה..."></textarea>
+                    <div class="char-count"><span id="supervisionOtherCount">0</span>/200</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>הערות נוספות</h2>
+                <div class="form-group">
+                    <label for="notes">מקום למידע נוסף חשוב</label>
+                    <textarea id="notes" maxlength="400" placeholder="כל מידע נוסף שברצונך להוסיף..."></textarea>
+                    <div class="char-count"><span id="notesCount">0</span>/400</div>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button type="button" class="btn-submit" onclick="handleGenerateSummary()">📝 צור סיכום</button>
+                <button type="reset" class="btn-reset" onclick="clearFormData(event)">🔄 נקה את הטופס</button>
+            </div>
+        </form>
+        
+        <div class="summary" id="summary">
+            <h3>📄 סיכום הדיווח</h3>
+            <div class="summary-content" id="summaryContent"></div>
+            <div class="summary-actions">
+                <button class="btn-share" onclick="downloadSummary()">💾 הורד כטקסט</button>
+                <button class="btn-share" style="background: #17a2b8;" onclick="shareWhatsApp()">💬 שלח בוואצאפ</button>
+                <button class="btn-share" style="background: #ea4335;" onclick="shareEmail()">📧 שלח במייל</button>
+                <button class="btn-share" style="background: #666;" onclick="copySummary()">📋 העתק</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'siud_form_data';
+
+        // --- פונקציות עזר לסימון (Red Alert) ---
+
+        /** מסמן שדה או קבוצה כחסר במידע עם סגנון אזהרה */
+        function markMissing(element, isGroup = false) {
+            if (isGroup) {
+                // עבור קבוצת radio/checkbox (אלמנט הוא ה-div.section)
+                const label = element.querySelector('[data-required-label]'); 
+                const h2 = element.querySelector('h2'); 
+                
+                if (label) {
+                    label.classList.add('label-warning');
+                    // אם ה-label הוא h2, נסמן אותו ישירות
+                    if (label.tagName === 'H2') {
+                         label.style.color = '#dc3545';
+                    }
+                } else if (h2) {
+                    h2.style.color = '#dc3545'; // סימון הכותרת
+                }
+                
+                // סימון ה-div כדי להבליט את הגבול
+                element.style.borderRight = '4px solid #dc3545';
+
+            } else {
+                // עבור input/select/textarea בודד
+                element.classList.add('input-warning');
+                
+                // מחפש את ה-label הקרוב ביותר
+                const label = document.querySelector(`label[for="${element.id}"]`) || element.closest('[data-required-field]')?.querySelector('label[data-required-label]');
+                
+                if (label) {
+                    label.classList.add('label-warning');
+                }
+            }
+        }
+
+        /** מסיר את סימון האזהרה משדה או קבוצה */
+        function clearMarking(element, isGroup = false) {
+            if (isGroup) {
+                // עבור קבוצת radio/checkbox (אלמנט הוא ה-div.section)
+                const label = element.querySelector('[data-required-label]');
+                const h2 = element.querySelector('h2'); 
+                
+                if (label) {
+                    label.classList.remove('label-warning');
+                    if (label.tagName === 'H2') {
+                         label.style.color = ''; // החזרת צבע ברירת מחדל
+                    }
+                } else if (h2) {
+                    h2.style.color = ''; // החזרת צבע ברירת מחדל
+                }
+                
+                element.style.borderRight = '';
+
+            } else {
+                // עבור input/select/textarea בודד
+                element.classList.remove('input-warning');
+                
+                const label = document.querySelector(`label[for="${element.id}"]`) || element.closest('[data-required-field]')?.querySelector('label[data-required-label]');
+                
+                if (label) {
+                    label.classList.remove('label-warning');
+                }
+            }
+        }
+
+        /** מזהה שדות חסרים ומחזיר את מספרם */
+        function checkMissingFields() {
+            let missingCount = 0;
+            
+            // 1. בדיקת שדות חובה ספציפיים (input, select, textarea)
+            document.querySelectorAll('[data-required-field]').forEach(group => {
+                const input = group.querySelector('input, select, textarea');
+                if (!input) return; // הגנה
+                
+                let isMissing = false;
+                // בודק Select או Textarea/Input ריק
+                if (input.tagName === 'SELECT' && input.value === '') {
+                    isMissing = true;
+                } else if (input.value.trim() === '') {
+                    // מכסה textarea, input[type="text"], input[type="number"]
+                    isMissing = true;
+                }
+                
+                if (isMissing) {
+                    markMissing(input);
+                    missingCount++;
+                } else {
+                    clearMarking(input);
+                }
+            });
+
+            // 2. בדיקת קבוצות חובה (radio / checkbox)
+            document.querySelectorAll('[data-required-group]').forEach(group => {
+                const name = group.getAttribute('data-required-group');
+                const checkedElements = document.querySelectorAll(`input[name="${name}"]:checked`);
+                let isMissing = checkedElements.length === 0;
+
+                // בדיקה מיוחדת לשדה 'אחר' בתוך קבוצה
+                if (name === 'mobility') {
+                    const otherRadio = document.querySelector('input[name="mobility"][value="other"]');
+                    const otherTextarea = document.getElementById('mobilityOther');
+                    if (otherRadio && otherRadio.checked && otherTextarea.value.trim() === '') {
+                        markMissing(otherTextarea);
+                        missingCount++;
+                    } else if (otherTextarea) {
+                        clearMarking(otherTextarea);
+                    }
+                }
+
+                // בדיקה מיוחדת לשדה 'אחר' בתוך השגחה
+                if (name === 'supervision') {
+                    const otherCheck = document.getElementById('supervisionOtherCheck');
+                    const otherTextarea = document.getElementById('supervisionOther');
+                    if (otherCheck.checked && otherTextarea.value.trim() === '') {
+                        markMissing(otherTextarea);
+                        missingCount++;
+                    } else if (otherTextarea) {
+                        clearMarking(otherTextarea);
+                    }
+                }
+                
+                // סימון הקבוצה
+                if (isMissing) {
+                    markMissing(group, true);
+                    missingCount++;
+                } else {
+                    clearMarking(group, true);
+                }
+            });
+
+            return missingCount;
+        }
+
+
+        /** מטפל בלחיצה על 'צור סיכום' - מציג אזהרה או יוצר סיכום */
+        function handleGenerateSummary(force = false) {
+            const missingCount = checkMissingFields();
+
+            if (missingCount > 0 && !force) {
+                // הדגשת האזהרה בצבע האדום
+                const confirmation = confirm(`⚠️ נמצאו ${missingCount} שדות חובה שלא מולאו או סומנו (מוצגים באדום). האם ברצונך ליצור סיכום ולשלוח בכל זאת?`);
+                if (confirmation) {
+                    generateSummary();
+                }
+            } else {
+                generateSummary();
+            }
+        }
+        
+        // --- שמירה אוטומטית (Local Storage) ---
+
+        /** שומר את נתוני הטופס הנוכחיים ב-Local Storage */
+        function saveFormData() {
+            const data = {};
+            const form = document.getElementById('form');
+            const elements = form.querySelectorAll('input, select, textarea');
+
+            elements.forEach(element => {
+                const id = element.id || element.name;
+                if (!id) return;
+
+                if (element.type === 'radio' || element.type === 'checkbox') {
+                    if (element.checked) {
+                        if (!data[id]) data[id] = [];
+                        data[id].push(element.value);
+                    }
+                } else {
+                    data[id] = element.value;
+                }
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        /** טוען נתונים שנשמרו וממלא את הטופס */
+        function loadFormData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) return;
+
+            const data = JSON.parse(savedData);
+            const form = document.getElementById('form');
+            let dataLoaded = false;
+
+            // בדיקה אם יש נתונים משמעותיים שנשמרו
+            if (Object.keys(data).filter(key => data[key] && (Array.isArray(data[key]) ? data[key].length > 0 : data[key].length > 0)).length > 2) {
+                dataLoaded = confirm('נמצאו נתונים שמורים מביקור קודם. האם ברצונך לטעון אותם?');
+            }
+
+            if (!dataLoaded) return;
+
+            form.querySelectorAll('input, select, textarea').forEach(element => {
+                const id = element.id || element.name;
+                if (!id || !data[id]) return;
+
+                if (element.type === 'radio' || element.type === 'checkbox') {
+                    if (Array.isArray(data[id]) && data[id].includes(element.value)) {
+                        element.checked = true;
+                        const event = new Event('change');
+                        element.dispatchEvent(event); 
+                    }
+                } else {
+                    element.value = data[id];
+                    const event = new Event('input');
+                    element.dispatchEvent(event);
+                }
+            });
+            
+            updateDynamicFields(); 
+            
+            alert('הנתונים נטענו בהצלחה!');
+        }
+
+        /** ניקוי נתונים שמורים */
+        function clearFormData(event) {
+            if(event) {
+                event.preventDefault(); 
+                if (confirm('האם אתה בטוח שברצונך לנקות את הטופס? נתונים שמורים יימחקו.')) {
+                    document.getElementById('form').reset();
+                    localStorage.removeItem(STORAGE_KEY);
+                    // הסרת כל סימוני האזהרה
+                    document.querySelectorAll('.input-warning, .label-warning').forEach(el => {
+                        el.classList.remove('input-warning', 'label-warning');
+                    });
+                    document.querySelectorAll('.section').forEach(el => {
+                        el.style.borderRight = '';
+                        const h2 = el.querySelector('h2');
+                        if(h2) h2.style.color = '';
+                    });
+                }
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+
+        document.getElementById('form').addEventListener('input', saveFormData);
+
+        window.addEventListener('beforeunload', (event) => {
+            if (localStorage.getItem(STORAGE_KEY)) {
+                event.preventDefault(); 
+                event.returnValue = ''; 
+            }
+        });
+
+        // --- לוגיקה של הטופס ושדות דינמיים ---
+
+        // עדכון ספירת תוים ואזהרות
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
+                const countId = e.target.id + 'Count';
+                const counter = document.getElementById(countId);
+                if (counter) {
+                    counter.textContent = e.target.value.length;
+                }
+            }
+            // הסרת אזהרה בעת מילוי
+             if (e.target.closest('[data-required-field]')) {
+                if (e.target.value.trim() !== '') {
+                    clearMarking(e.target);
+                }
+            }
+        });
+        // ניקוי סימון קבוצה בעת בחירה (change event for iOS radio/checkbox compatibility)
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'radio' || e.target.type === 'checkbox') {
+                 const group = e.target.closest('[data-required-group]');
+                 if (group) clearMarking(group, true);
+            }
+            // גם שמירה אוטומטית בעת change
+            saveFormData();
+        });
+        
+        // פונקציה כללית לעדכון שדות דינמיים
+        function updateDynamicFields() {
+            // ניידות "אחר"
+            const mobilityOtherRadio = document.querySelector('input[name="mobility"][value="other"]');
+            if (mobilityOtherRadio) {
+                const div = document.getElementById('mobilityOtherDiv');
+                div.style.display = mobilityOtherRadio.checked ? 'block' : 'none';
+            }
+
+            // ספיגה "אחר" ו"שימוש"
+            const absorbentChecked = document.querySelector('input[name="absorbent"]:checked');
+            const otherDiv = document.getElementById('absorbentOtherDiv');
+            const usageDiv = document.getElementById('absorbentUsageDiv');
+            if (absorbentChecked) {
+                const isOther = absorbentChecked.value === 'other';
+                const hasAbsorbent = absorbentChecked.value !== 'אין';
+                otherDiv.style.display = isOther ? 'block' : 'none';
+                usageDiv.style.display = hasAbsorbent ? 'block' : 'none';
+            } else {
+                otherDiv.style.display = 'none';
+                usageDiv.style.display = 'none';
+            }
+
+            // השגחה "אחר"
+            const supervisionOtherCheck = document.getElementById('supervisionOtherCheck');
+            if (supervisionOtherCheck) {
+                document.getElementById('supervisionOtherDiv').style.display = supervisionOtherCheck.checked ? 'block' : 'none';
+            }
+        }
+        
+        document.querySelectorAll('input[name="mobility"]').forEach(el => {
+            el.addEventListener('change', updateDynamicFields);
+        });
+
+        document.querySelectorAll('input[name="absorbent"]').forEach(el => {
+            el.addEventListener('change', updateDynamicFields);
+        });
+
+        document.getElementById('supervisionOtherCheck').addEventListener('change', updateDynamicFields);
+
+
+        // --- טעינת נתונים מקובץ טקסט ---
+
+        document.getElementById('fileLoader').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                try {
+                    parseSummaryToForm(content);
+                    alert('הנתונים נטענו לטופס בהצלחה!');
+                } catch (error) {
+                    alert('אירעה שגיאה בטעינת הקובץ. ודא שהקובץ במבנה תקין.');
+                    console.error('File parsing error:', error);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        /** מנסה לנתח את סיכום הטקסט ולמלא את הטופס */
+        function parseSummaryToForm(summaryText) {
+            document.getElementById('form').reset();
+            
+            // מילוי שדה פשוט
+            const getField = (key) => {
+                const regex = new RegExp(`${key}:\\s*([^\\n\\r]+)`, 'i');
+                const match = summaryText.match(regex);
+                return match ? match[1].trim() : '';
+            };
+
+            // 1. פרטים בסיסיים
+            document.getElementById('caller').value = getField('מי הפונה');
+            document.getElementById('gender').value = getField('מין המטופל').includes('זכר') ? 'm' : getField('מין המטופל').includes('נקבה') ? 'f' : '';
+
+            // 2. נפילות
+            document.getElementById('fallsTotal').value = getField('סה"כ נפילות ב-3 חודשים').replace(/[^0-9]/g, '');
+            document.getElementById('fallsHome').value = getField('מהן בבית').replace(/[^0-9]/g, '');
+            document.getElementById('fallsGetUp').value = getField('קם/קמה לבד');
+            
+            // מילוי שדות טקסט מורכבים
+            document.getElementById('mobilityDetails').value = getField('פרטים נוספים על ניידות');
+            document.getElementById('notes').value = getField('הערות נוספות');
+            
+            // פונקציה למילוי רדיו לפי שם הקבוצה
+            const fillRadio = (groupName, summaryKey) => {
+                const match = summaryText.match(new RegExp(`${summaryKey}:\\s*\\n?([^\\n]+)`, 's'));
+                if (match) {
+                    let value = match[1].trim().split('\n')[0].trim();
+                    
+                    if (groupName === 'mobility' && !document.querySelector(`input[name="${groupName}"][value="${value}"]`)) {
+                         document.querySelector('input[name="mobility"][value="other"]').checked = true;
+                         document.getElementById('mobilityOther').value = value;
+                    } else {
+                         const radio = document.querySelector(`input[name="${groupName}"][value="${value}"]`);
+                         if (radio) radio.checked = true;
+                    }
+                }
+            };
+
+            fillRadio('mobility', '1. ניידות בבית');
+            fillRadio('transferLying', 'משכיבה לישיבה');
+            fillRadio('transferSitting', 'מישיבה לעמידה');
+            fillRadio('dressing', '3. תלות בזולת בהלבשה');
+            fillRadio('bathing', '4. תלות בזולת ברחצה');
+            fillRadio('eating', '5. אכילה ושתייה');
+            fillRadio('excretion', '6. טיפול בהפרשות');
+
+            // מילוי קבוצות צ'קבוקס והשגחה מורכבת
+            const supervisionMatch = summaryText.match(/7. צורך בהשגחה:\n([\s\S]*?)\n\n/);
+            if (supervisionMatch) {
+                // פיצול לפי שורות והסרת תווי רשימה
+                const items = supervisionMatch[1].split('\n').map(line => line.replace(/•|\s|\n/g, '').trim()).filter(Boolean);
+                items.forEach(item => {
+                    // מנסה למצוא התאמה מדויקת
+                    const checkbox = document.querySelector(`input[name="supervision"][value="${item}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    } else if (item.startsWith('אחר')) {
+                        // טיפול ב"אחר"
+                        document.getElementById('supervisionOtherCheck').checked = true;
+                        // מנסה לחלץ את הטקסט של "אחר" מתוך השורה בסיכום
+                        const otherTextMatch = item.match(/אחר\s*-\s*([^/]+)/);
+                        document.getElementById('supervisionOther').value = otherTextMatch ? otherTextMatch[1].trim() : '';
+                    }
+                });
+            }
+
+
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                 const event = new Event('input');
+                 el.dispatchEvent(event);
+            });
+            updateDynamicFields();
+        }
+        
+        // --- פונקציות הסיכום הקיימות (generateSummary) ---
+        
+        function generateSummary() {
+            // קו מקוצר ל-26 תווים
+            let summary = '═════════════════\n'; 
+            summary += '     דיווח תיפקוד לביטוח סיעוד\n';
+            // קו מקוצר ל-26 תווים
+            summary += '═════════════════\n\n'; 
+
+            const genderSelect = document.getElementById('gender');
+            const genderText = genderSelect.value === 'm' ? 'זכר' : genderSelect.value === 'f' ? 'נקבה' : 'לא צוין';
+            summary += `מי הפונה: ${document.getElementById('caller').value || 'לא צוין'}\n`;
+            summary += `מין המטופל: ${genderText}\n\n`;
+
+            // ניידות בבית
+            const mobilityValue = document.querySelector('input[name="mobility"]:checked')?.value;
+            let mobilityText = mobilityValue || 'לא צוין';
+            if (mobilityValue === 'other') {
+                mobilityText = document.getElementById('mobilityOther').value || 'אחר - לא צוין פירוט';
+            }
+            summary += `1. ניידות בבית:\n${mobilityText}\n\n`;
+
+            // נפילות
+            summary += `2. נפילות:\n`;
+            summary += `   - סה"כ נפילות ב-3 חודשים: ${document.getElementById('fallsTotal').value || '0'}\n`;
+            summary += `   - מהן בבית: ${document.getElementById('fallsHome').value || '0'}\n`;
+            summary += `   - קם/קמה לבד: ${document.getElementById('fallsGetUp').value || 'לא צוין'}\n\n`;
+
+            // תלות בזולת במעברים
+            summary += `תלות בזולת במעברים:\n`;
+            summary += `   - משכיבה לישיבה: ${document.querySelector('input[name="transferLying"]:checked')?.value || 'לא צוין'}\n`;
+            summary += `   - מישיבה לעמידה: ${document.querySelector('input[name="transferSitting"]:checked')?.value || 'לא צוין'}\n\n`;
+
+            // פרטים נוספים על ניידות
+            const mobilityDetails = document.getElementById('mobilityDetails').value;
+            if (mobilityDetails) {
+                summary += `פרטים נוספים על ניידות:\n${mobilityDetails}\n\n`;
+            }
+
+            // הלבשה
+            const dressingValue = document.querySelector('input[name="dressing"]:checked')?.value || 'לא צוין';
+            summary += `3. תלות בזולת בהלבשה:\n${dressingValue}\n`;
+            const dressingDetails = document.getElementById('dressingDetails').value;
+            if (dressingDetails) summary += `   הערות: ${dressingDetails}\n`;
+            summary += '\n';
+
+            // רחצה
+            const bathingValue = document.querySelector('input[name="bathing"]:checked')?.value || 'לא צוין';
+            summary += `4. תלות בזולת ברחצה:\n${bathingValue}\n`;
+            const bathingDetails = document.getElementById('bathingDetails').value;
+            if (bathingDetails) summary += `   הערות: ${bathingDetails}\n`;
+            summary += '\n';
+
+            // אכילה ושתייה
+            const eatingValue = document.querySelector('input[name="eating"]:checked')?.value || 'לא צוין';
+            summary += `5. אכילה ושתייה:\n${eatingValue}\n`;
+            const eatingDetails = document.getElementById('eatingDetails').value;
+            if (eatingDetails) summary += `   הערות: ${eatingDetails}\n`;
+            summary += '\n';
+
+            // הפרשות
+            const excretionValue = document.querySelector('input[name="excretion"]:checked')?.value || 'לא צוין';
+            summary += `6. טיפול בהפרשות:\n${excretionValue}\n`;
+            const excretionDetails = document.getElementById('excretionDetails').value;
+            if (excretionDetails) summary += `   הערות: ${excretionDetails}\n`;
+
+            // מוצרי ספיגה
+            const absorbentValue = document.querySelector('input[name="absorbent"]:checked')?.value;
+            if (absorbentValue) {
+                summary += `\n   מוצרי ספיגה: `;
+                if (absorbentValue === 'other') {
+                    summary += document.getElementById('absorbentOtherText').value || 'אחר - לא צוין פירוט';
+                } else {
+                    summary += absorbentValue;
+                }
+                summary += '\n';
+
+                const usageChecked = Array.from(document.querySelectorAll('input[name="absorbentUsage"]:checked')).map(el => el.value);
+                if (usageChecked.length > 0) {
+                    summary += `   שימוש: ${usageChecked.join(', ')}\n`;
+                }
+            }
+            summary += '\n';
+
+            // השגחה
+            const supervisionChecked = Array.from(document.querySelectorAll('input[name="supervision"]:checked')).map(el => el.value);
+            if (supervisionChecked.length > 0) {
+                summary += `7. צורך בהשגחה:\n`;
+                supervisionChecked.forEach(item => {
+                    if (item === 'other') {
+                        summary += `   • ${document.getElementById('supervisionOther').value || 'אחר - לא צוין פירוט'}\n`;
+                    } else {
+                        summary += `   • ${item}\n`;
+                    }
+                });
+                summary += '\n';
+            }
+
+            // הערות
+            const notesValue = document.getElementById('notes').value;
+            if (notesValue) {
+                summary += `הערות נוספות:\n${notesValue}\n`;
+            }
+
+                       summary += '\n═════════════════\n'; 
+            summary += `תאריך: ${new Date().toLocaleDateString('he-IL')}\n`;
+
+            document.getElementById('summaryContent').textContent = summary;
+            document.getElementById('summary').classList.add('show');
+            
+            // iOS-compatible smooth scroll
+            const summaryEl = document.getElementById('summary');
+            try {
+                summaryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch(e) {
+                summaryEl.scrollIntoView(true);
+            }
+        }
+        
+        // --- פונקציות שיתוף קיימות ---
+        
+        function downloadSummary() {
+            const text = document.getElementById('summaryContent').textContent;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `דיווח-תיפקוד-${new Date().toLocaleDateString('he-IL').replace(/\//g, '-')}.txt`;
+            link.click();
+        }
+        
+        function shareWhatsApp() {
+            const text = document.getElementById('summaryContent').textContent;
+            const encoded = encodeURIComponent(text);
+            const phone = '97246049510'; 
+            
+            // Use native share on iOS if available
+            if (navigator.share) {
+                navigator.share({ text: text }).catch(() => {
+                    // Fallback if user cancels or share fails
+                    window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
+                });
+            } else {
+                window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
+            }
+        }
+        
+        function shareEmail() {
+            const text = document.getElementById('summaryContent').textContent;
+            const subject = encodeURIComponent('דיווח תיפקוד לביטוח סיעוד');
+            const body = encodeURIComponent(text);
+            window.location.href = `mailto:nir.tsabar@clalit.org.il?subject=${subject}&body=${body}`;
+        }
+        
+        function copySummary() {
+            const text = document.getElementById('summaryContent').textContent;
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('הסיכום הועתק ללוח');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+        
+        // iOS fallback for clipboard copy
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            ta.setSelectionRange(0, text.length); // iOS requires this
+            try {
+                document.execCommand('copy');
+                alert('הסיכום הועתק ללוח');
+            } catch(err) {
+                alert('העתקה נכשלה, נסה להעתיק ידנית.');
+            }
+            document.body.removeChild(ta);
+        }
+    </script>
+</body>
+</html>
